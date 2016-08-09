@@ -1,12 +1,12 @@
+package db;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-public class JdbcUtil {
-	
-	public static void main(String arg[]) throws Exception{
-		Connection conn=getConnection();
-		conn.close();
-	}
-	   public static Connection getConnection (){
+
+public class Myconnetion implements DBconnection {
+
+	@Override
+	public Connection getConnection() {
 		   Connection conn=null;
 		   try
 	        {
@@ -22,4 +22,5 @@ public class JdbcUtil {
 	        }
 		return conn;
 	}
+
 }

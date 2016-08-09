@@ -1,3 +1,4 @@
+package crawler;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
@@ -30,6 +31,9 @@ public class NewsCrawler extends BreadthCrawler {
         this.addRegex("-.*#.*");
     }
 
+    /* (non-Javadoc)
+     * @see cn.edu.hfut.dmic.webcollector.fetcher.Visitor#visit(cn.edu.hfut.dmic.webcollector.model.Page, cn.edu.hfut.dmic.webcollector.model.CrawlDatums)
+     */
     @Override
     public void visit(Page page, CrawlDatums next) {
         String url = page.getUrl();
@@ -37,7 +41,6 @@ public class NewsCrawler extends BreadthCrawler {
         if (page.matchUrl("http://news.hfut.edu.cn/show-.*html")) {
             /*we use jsoup to parse page*/
             Document doc = page.getDoc();
-
             /*extract title and content of news by css selector*/
             String title = page.select("div[id=Article]>h2").first().text();
             String content = page.select("div#artibody", 0).text();
