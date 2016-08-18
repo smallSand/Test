@@ -69,14 +69,14 @@ public class DemoImageCrawler extends BreadthCrawler {
     public static void main(String[] args) throws Exception {
         DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl", "download");
         //添加种子URL
-        demoImageCrawler.addSeed("http://desk.zol.com.cn/bizhi/.*.html");
+        demoImageCrawler.addSeed("http://www.youmeitu.com/");
         //限定爬取范围
-        demoImageCrawler.addRegex("http://image.baidu.com/search/detail/.*");
+        demoImageCrawler.addRegex("http://www.youmeitu.com/.*");
         //设置为断点爬取，否则每次开启爬虫都会重新爬取
-        demoImageCrawler.setResumable(true);
+        demoImageCrawler.setResumable(false);
         demoImageCrawler.setThreads(30);
         Config.MAX_RECEIVE_SIZE = 1000 * 1000 * 10;
-        demoImageCrawler.start(3);
+        demoImageCrawler.start(2);
     }
 
     public void computeImageId(){

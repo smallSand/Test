@@ -1,9 +1,14 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class FileUtil {
 
@@ -43,5 +48,32 @@ public class FileUtil {
 				}
 		}
 		return result;
+	}
+	
+	public static byte[] URLtobyteArray(String url) throws Exception{
+		byte[] arr=null;
+		URL link = new URL(url);
+		HttpURLConnection conn = (HttpURLConnection) link.openConnection();
+		conn.setRequestProperty("User-Agent",
+				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36");
+		// 尝试连接30s
+		conn.setConnectTimeout(1000 * 3 * 60);
+		conn.setReadTimeout(1000 * 3 * 60);
+		// 得到输入流
+		InputStream inputStream = conn.getInputStream();
+		// 获取自己数组
+		 arr = readInputStream(inputStream);
+		return arr;
+	}
+	
+	public static byte[] readInputStream(InputStream inputStream) throws IOException {
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		while ((len = inputStream.read(buffer)) != -1) {
+			bos.write(buffer, 0, len);
+		}
+		bos.close();
+		return bos.toByteArray();
 	}
 }

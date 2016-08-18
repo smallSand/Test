@@ -16,17 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package crawler;
-import java.io.File;
-
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
-import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
-import cn.edu.hfut.dmic.webcollector.util.FileUtils;
-import util.FileUtil;
+import cn.edu.hfut.dmic.webcollector.plugin.ram.RamCrawler;
 
 
 /**
@@ -45,11 +38,7 @@ import util.FileUtil;
  *
  * @author hu
  */
-public class TutorialCrawler extends BreadthCrawler {
-
-    public TutorialCrawler(String crawlPath, boolean autoParse) {
-        super(crawlPath, autoParse);
-    }
+public class Tutorial2Crawler extends RamCrawler {
 
     /*
         可以往next中添加希望后续爬取的任务，任务可以是URL或者CrawlDatum
@@ -60,47 +49,27 @@ public class TutorialCrawler extends BreadthCrawler {
         新版本中，可以直接通过 page.select(css选择器)方法来抽取网页中的信息，等价于
         page.getDoc().select(css选择器)方法，page.getDoc()获取到的是Jsoup中的
         Document对象，细节请参考Jsoup教程
-    */
+     */
     @Override
     public void visit(Page page, CrawlDatums next) {
-        	Elements as = page.select("a[href]");
-        	for(Element e:as){
-        		String url=e.attr("abs:href");
-        		next.add(url);
-        	}
-        	if(!page.getUrl().contains("#")){
-        		try{
-            		Document doc=  page.doc();
-            		Element guide = doc.select(".m-list-guide").get(0);
-            		Elements guides=guide.select("a");
-            		String classifi=guides.get(1).text();
-            		String title = doc.select(".m-list-tools").get(0).select("h2").text();
-            		System.out.println(classifi+"--"+title);
-            		
-            		File path=new File("F:/优美图/"+classifi+"/"+title);
-            		if(!path.exists()){
-            			path.mkdirs();
-            		}
-            		Elements  imgs=doc.select(".m-list-content").get(0).select("img");
-            		for(int i=0;i<imgs.size();i++){
-            			File imageFile=new File(path,i+".jpg");
-            			FileUtils.writeFile(imageFile, FileUtil.URLtobyteArray("http://www.youmeitu.com"+imgs.get(i).attr("src")));
-            		}
-            		
-        		}catch(Exception e){
-        			e.printStackTrace();
-        		}
-        	}
+        if (page.matchUrl("http://blog.csdn.net/.*/article/details/.*")) {
+            String title = page.select("div[class=article_title]").first().text();
+            String author = page.select("div[id=blog_userface]").first().text();
+            System.out.println("title:" + title + "\tauthor:" + author);
+        }
     }
 
     public static void main(String[] args) throws Exception {
-        TutorialCrawler crawler = new TutorialCrawler("crawler", true);
-        crawler.addSeed("http://www.youmeitu.com/");
-        crawler.addRegex(("http://www.youmeitu.com/.*/.*.html"));
-        crawler.addRegex("-.*#.*");
+        Tutorial2Crawler crawler = new Tutorial2Crawler();
+        crawler.addSeed("http://blog.csdn.net/.*");
+        crawler.addRegex("http://blog.csdn.net/.*/article/details/.*");
+
+        /*可以设置每个线程visit的间隔，这里是毫秒*/
+        //crawler.setVisitInterval(1000);
         /*可以设置http请求重试的间隔，这里是毫秒*/
+        //crawler.setRetryInterval(1000);
         crawler.setThreads(30);
-        crawler.start(4);
+        crawler.start(2);
     }
 
 }

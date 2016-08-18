@@ -19,16 +19,6 @@ public class NewsCrawler extends BreadthCrawler {
      */
     public NewsCrawler(String crawlPath, boolean autoParse) {
         super(crawlPath, autoParse);
-        /*种子页面*/
-        this.addSeed("http://news.hfut.edu.cn/list-1-1.html");
-
-        /*正则规则设置*/
-        /*爬取符合 http://news.hfut.edu.cn/show-xxxxxxhtml的URL*/
-        this.addRegex("http://news.hfut.edu.cn/show-.*html");
-        /*不要爬取 jpg|png|gif*/
-        this.addRegex("-.*\\.(jpg|png|gif).*");
-        /*不要爬取包含 # 的URL*/
-        this.addRegex("-.*#.*");
     }
 
     /* (non-Javadoc)
@@ -62,6 +52,15 @@ public class NewsCrawler extends BreadthCrawler {
 
     public static void main(String[] args) throws Exception {
         NewsCrawler crawler = new NewsCrawler("crawl", true);
+        /*种子页面*/
+        crawler.addSeed("http://news.hfut.edu.cn/list-1-1.html");
+        /*正则规则设置*/
+        /*爬取符合 http://news.hfut.edu.cn/show-xxxxxxhtml的URL*/
+        crawler.addRegex("http://news.hfut.edu.cn/show-.*html");
+        /*不要爬取 jpg|png|gif*/
+        crawler.addRegex("-.*\\.(jpg|png|gif).*");
+        /*不要爬取包含 # 的URL*/
+        crawler.addRegex("-.*#.*");
         /*线程数*/
         crawler.setThreads(50);
         /*设置每次迭代中爬取数量的上限*/
