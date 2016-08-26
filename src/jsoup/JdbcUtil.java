@@ -17,7 +17,7 @@ public class JdbcUtil {
 	private static List<String> ids = new ArrayList<String>();
 
 	public static void main(String arg[]) throws Exception {
-		Connection conn = getConnection();
+		Connection conn = getTestConnection();
 		// String sql = "select * from product where prodtype like '%护理保险%'";
 		// String parentid="54dca536dccb4e0295316c30353aeffe";//父类别id
 		// String name="护理保险";//子类别
@@ -96,18 +96,18 @@ public class JdbcUtil {
 		return conn;
 	}
 
-	public static  List<String> getUrls(Connection conn){
-		   List<String> list=new ArrayList<String>();
-		   try {
-			PreparedStatement pre=conn.prepareStatement("select url from tb_product_new");
-			ResultSet rs=pre.executeQuery();
-			while(rs.next()){
-				String url=rs.getString("url");
+	public static List<String> getUrls(Connection conn) {
+		List<String> list = new ArrayList<String>();
+		try {
+			PreparedStatement pre = conn.prepareStatement("select url from tb_product_new");
+			ResultSet rs = pre.executeQuery();
+			while (rs.next()) {
+				String url = rs.getString("url");
 				list.add(url);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
-	   }
+	}
 }

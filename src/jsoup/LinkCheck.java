@@ -49,7 +49,7 @@ public class LinkCheck {
 	}
 
 	public static void process(Connection dbconn, String company, String proname, String prourl) {
-		if(urls.contains(prourl)){
+		if(!urls.contains(prourl)){
 			String insertSQl = "insert into tb_product_new(name,url,com) values(?,?,?)";
 			PreparedStatement insertPre;
 			try {

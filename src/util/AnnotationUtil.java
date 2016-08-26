@@ -49,7 +49,7 @@ public class AnnotationUtil {
         		LinkCheck.class.getName());
 		for(String company:map.keySet()){
 			String methodname=map.get(company);
-			System.out.println(company);
+			System.out.println(company+methodname);
 		}
     }
  
